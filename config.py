@@ -16,3 +16,8 @@ STREETVIEW_API_PREFIX = 'https://maps.googleapis.com/maps/api/streetview?'
 
 DIRECTIONS_API_KEY = os.environ.get('DIRECTIONS_API_KEY')
 STREETVIEW_API_KEY = os.environ.get('STREETVIEW_API_KEY')
+
+#Minimum interval in minutes between tweets
+
+MINIMUM_INTERVAL = 180
+
