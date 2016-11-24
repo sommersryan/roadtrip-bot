@@ -1,11 +1,10 @@
 import random, json, urllib.request
-from config import MIN_LATITUDE, MAX_LATITUDE, MIN_LONGITUDE, MAX_LONGITUDE, 
-	GEOCODING_API_PREFIX, GEOCODING_API_KEY
+from config import MIN_LATITUDE, MAX_LATITUDE, MIN_LONGITUDE, MAX_LONGITUDE, GEOCODING_API_PREFIX, GEOCODING_API_KEY
 
 def randomLocation():
 	## Returns tuple of randomly selected lat/long point
-	lat = round(random.uniform(MIN_LATITUDE, MAX_LATITUDE),6)
-	long = round(random.uniform(MIN_LONGITUDE, MAX_LONGITUDE, 6)
+	lat = round(random.uniform(float(MIN_LATITUDE), float(MAX_LATITUDE)),6)
+	long = round(random.uniform(float(MIN_LONGITUDE), float(MAX_LONGITUDE)), 6)
 	return (lat,long)
 	
 def buildTrip():
@@ -24,8 +23,7 @@ def revGeocode(latLong):
 
 def getGeoCodeResponse(latLong):
 	## Takes a tuple of latitude, longitude, builds request and gets geocode data	
-	request = 
-		{ 
+	request = { 
 		'prefix' : GEOCODING_API_PREFIX,
 		'latitude' : latLong[0], 
 		'longitude' : latLong[1], 
@@ -41,7 +39,7 @@ def getGeoCodeResponse(latLong):
 	
 	return parsed
 	
-def parseGeoCodeResponse(response)
+def parseGeoCodeResponse(response):
 	## Parses a response from getGeoCodeResponse
 	if not 'results' in response:
 		return None
