@@ -11,11 +11,13 @@ MAX_LONGITUDE = os.environ.get('MAX_LONGITUDE') or ''
 
 DIRECTIONS_API_PREFIX = 'https://maps.googleapis.com/maps/api/directions/json?'
 STREETVIEW_API_PREFIX = 'https://maps.googleapis.com/maps/api/streetview?'
+GEOCODING_API_PREFIX = 'https://maps.googleapis.com/maps/api/geocode/json?'
 
 #API Keys
 
 DIRECTIONS_API_KEY = os.environ.get('DIRECTIONS_API_KEY')
 STREETVIEW_API_KEY = os.environ.get('STREETVIEW_API_KEY')
+GEOCODING_API_KEY = os.environ.get('GEOCODING_API_KEY')
 
 #Minimum interval in minutes between tweets
 
