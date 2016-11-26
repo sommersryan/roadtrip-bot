@@ -56,6 +56,5 @@ def generateWaypoints(num):
 	for i in range(0,num):
 		latLong = randomLocation()
 		placeName = revGeocode(latLong)
-		key = 'waypoint' + str(i)
 		waypoint = { 'latLong' : latLong, 'placeName' : placeName }
-		yield { key : waypoint }
+		yield waypoint
