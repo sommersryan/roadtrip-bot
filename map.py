@@ -58,3 +58,10 @@ def generateWaypoints(num):
 		placeName = revGeocode(latLong)
 		waypoint = { 'latLong' : latLong, 'placeName' : placeName }
 		yield waypoint
+
+def addWaypoints(trip, numWaypoints):
+	## Adds waypoints to trip
+	for i in enumerate(generateWaypoints(numWaypoints)):
+		trip.update({'waypoint' + str(i[0]) : i[1]})
+	
+	return trip
