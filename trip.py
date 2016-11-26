@@ -1,6 +1,34 @@
-import urllib.request, json
+import urllib.request, json, re
 from config import DIRECTIONS_API_PREFIX, DIRECTIONS_API_KEY
 
+class RoadTrip(Object):
+	
+	def __init__(self, legs = []):
+		self.legs = legs
+		
+class TripLeg(Object):
+
+	def __init__(self, steps = [], startLocation =(), endLocation =(), distance = 0, duration =0):
+		self.steps = steps
+		self.startLocation = startLocation
+		self.endLocation = endLocation
+		self.distance = distance
+		self.duration = duration
+
+class LegStep(Object):
+
+	def __init__(self, htmlInstructions = '', startLocation = (), endLocation = (), distance = 0, duration = 0):
+		self.htmlInstructions = htmlInstructions
+		self.startLocation = startLocation
+		self.endLocation = endLocation
+		self.distance = distance
+		self.duration = duration
+		
+	def asString(self):
+		#change commands to verbs here? 
+		cleanString = re.sub('<[^<]+?>', '', self.htmlInstructions)
+		return cleanString
+		
 def getDirectionsURL(trip, avoidHighways=True):
 	## takes Trip dict from buildTrip, checks for waypoints, builds request and gets response
 	
@@ -48,4 +76,3 @@ def parseDirectionsResponse(response):
 	if response['status'] != 'OK':
 		return None
 		
-	
