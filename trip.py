@@ -3,15 +3,16 @@ from config import DIRECTIONS_API_PREFIX, DIRECTIONS_API_KEY
 
 class Trip(object):
 	
-	def __init__(self, startLocation, endLocation, legs = []):
+	def __init__(self, startLocation, endLocation, legs = [], waypoints = []):
 		self.startLocation = startLocation
 		self.endLocation = endLocation
 		self.startText = map.revGeocode(startLocation)
 		self.endText = map.revGeocode(endLocation)
 		self.legs = legs
+		self.waypoints = waypoints
 	
 	@classmethod
-	def fromTrip(cls, trip):
+	def fromTripDict(cls, trip):
 		
 		request = getDirectionsURL(trip)
 		jsonResponse = getDirectionsResponse(request)
@@ -19,12 +20,18 @@ class Trip(object):
 		startLocation = trip['origin']['latLong']
 		endLocation = trip['destination']['latLong']
 		
+		waypoints = []
+		
+		for key, value in trip.items():
+			if key.startswith('waypoint'):
+				waypoints.append(value)
+		
 		legs = []
 		
 		for leg in jsonResponse['routes'][0]['legs']:
 			legs.append(Leg.fromJSON(leg))
 		
-		inst = cls(startLocation, endLocation, legs)
+		inst = cls(startLocation, endLocation, legs, waypoints)
 		
 		return inst
 		
@@ -34,7 +41,15 @@ class Trip(object):
 		
 	def __str__(self):
 	
-		return 'From {0} to {1}'.format(self.startText, self.endText)
+		waypointText = ''
+	
+		if self.waypoints:
+			waypointText = 'by way of '
+			for waypoint in self.waypoints:
+				t = waypoint['placeName']
+				waypointText += '{0}, '.format(t)
+				
+		return 'From {0} to {1} {2}'.format(self.startText, self.endText, waypointText)
 	
 	
 class Leg(object):
@@ -145,7 +160,7 @@ def getDirectionsURL(trip, avoidHighways=True):
 			
 		for waypoint in waypoints:
 			requestURL+= 'via:{0[0]}%2c{0[1]}%7c'.format(waypoint)
-		
+			#requestURL +=  '{0}[0],{0}[1]|'.format(waypoint)
 	if avoidHighways:
 	
 		requestURL += '&avoid=highways'
