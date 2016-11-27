@@ -30,3 +30,8 @@ MINIMUM_INTERVAL = 180
 AWS_S3_BUCKET = os.environ.get('AWS_S3_BUCKET') or ''
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID") or ''
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY") or ''
+
+CONSUMER_SECRET = os.environ.get('CONSUMER_SECRET') or ''
+CONSUMER_KEY = os.environ.get('CONSUMER_KEY') or ''
+ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN') or ''
+ACCESS_SECRET = os.environ.get('ACCESS_SECRET') or ''
