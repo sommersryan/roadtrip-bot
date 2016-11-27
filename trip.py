@@ -1,28 +1,57 @@
-import urllib.request, json, re
+import urllib.request, map, json, re
 from config import DIRECTIONS_API_PREFIX, DIRECTIONS_API_KEY
 
-class RoadTrip(Object):
+class RoadTrip(object):
 	
 	def __init__(self, legs = []):
 		self.legs = legs
 		
-class TripLeg(Object):
+class Leg(object):
 
-	def __init__(self, steps = [], startLocation =(), endLocation =(), distance = 0, duration =0):
+	def __init__(self, steps = [], startLocation =(), endLocation =(), distance = {}, duration = {}):
 		self.steps = steps
 		self.startLocation = startLocation
 		self.endLocation = endLocation
 		self.distance = distance
 		self.duration = duration
+	
+	def asString(self):
+		legString = ''
+		legString += map.revGeocode(self.startLocation)
+		legString += ' to '
+		legString += map.revGeocode(self.endLocation)
+		legString += ', '
+		legString += self.distance['text']
+		legString += ', '
+		legString += self.duration['text']
+		
+		return legString
+		
 
-class LegStep(Object):
+class Step(object):
 
-	def __init__(self, htmlInstructions = '', startLocation = (), endLocation = (), distance = 0, duration = 0):
+	def __init__(self, htmlInstructions = '', startLocation = (), endLocation = (), distance = {}, duration = {}):
 		self.htmlInstructions = htmlInstructions
 		self.startLocation = startLocation
+		self.startText = map.revGeocode(startLocation)
 		self.endLocation = endLocation
+		self.endText = map.revGeocode(endLocation)
 		self.distance = distance
 		self.duration = duration
+	
+	@classmethod
+	def fromJSON(cls, jsonObject):
+		htmlInstructions = jsonObject['html_instructions']
+		startLocation = (jsonObject['start_location']['lat'], jsonObject['start_location']['lng'])
+		endLocation = (jsonObject['end_location']['lat'], jsonObject['end_location']['lng'])
+		startText = map.revGeocode(startLocation)
+		endText = map.revGeocode(endLocation)
+		distance = jsonObject['distance']
+		duration = jsonObject['duration']
+		
+		inst = cls(htmlInstructions, startLocation, endLocation, distance, duration)
+		
+		return inst
 		
 	def asString(self):
 		#change commands to verbs here? 
