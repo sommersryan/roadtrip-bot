@@ -1,11 +1,42 @@
 import urllib.request, map, json, re
 from config import DIRECTIONS_API_PREFIX, DIRECTIONS_API_KEY
 
-class RoadTrip(object):
+class Trip(object):
 	
-	def __init__(self, legs = []):
+	def __init__(self, startLocation, endLocation, legs = []):
+		self.startLocation = startLocation
+		self.endLocation = endLocation
+		self.startText = map.revGeocode(startLocation)
+		self.endText = map.revGeocode(endLocation)
 		self.legs = legs
+	
+	@classmethod
+	def fromTrip(cls, trip):
 		
+		request = getDirectionsURL(trip)
+		jsonResponse = getDirectionsResponse(request)
+			
+		startLocation = trip['origin']['latLong']
+		endLocation = trip['destination']['latLong']
+		
+		legs = []
+		
+		for leg in jsonResponse['routes'][0]['legs']:
+			legs.append(Leg.fromJSON(leg))
+		
+		inst = cls(startLocation, endLocation, legs)
+		
+		return inst
+		
+	def __repr__(self):
+	
+		return '<{0} to {1}>'.format(self.startText, self.endText)
+		
+	def __str__(self):
+	
+		return 'From {0} to {1}'.format(self.startText, self.endText)
+	
+	
 class Leg(object):
 
 	def __init__(self, steps = [], startLocation =(), endLocation =(), distance = {}, duration = {}):
@@ -132,9 +163,3 @@ def getDirectionsResponse(requestURL):
 	serialResponse = json.loads(directionsResponse)
 	
 	return serialResponse
-
-def parseDirectionsResponse(response):
-	
-	if response['status'] != 'OK':
-		return None
-		
