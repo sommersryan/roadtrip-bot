@@ -27,3 +27,6 @@ STREETVIEW_SIZE = '600x300'
 
 MINIMUM_INTERVAL = 180
 
+AWS_S3_BUCKET = os.environ.get('AWS_S3_BUCKET') or ''
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID") or ''
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY") or ''
