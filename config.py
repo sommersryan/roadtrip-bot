@@ -20,6 +20,9 @@ DIRECTIONS_API_KEY = os.environ.get('DIRECTIONS_API_KEY')
 STREETVIEW_API_KEY = os.environ.get('STREETVIEW_API_KEY')
 GEOCODING_API_KEY = os.environ.get('GEOCODING_API_KEY')
 
+STREETVIEW_PITCH = '0'
+STREETVIEW_SIZE = '600x300'
+
 #Minimum interval in minutes between tweets
 
 MINIMUM_INTERVAL = 180
