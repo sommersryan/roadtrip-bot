@@ -1,7 +1,7 @@
 from config import STREETVIEW_API_KEY, STREETVIEW_API_PREFIX, STREETVIEW_METADATA_API_PREFIX, STREETVIEW_PITCH, STREETVIEW_SIZE
 import urllib.request, json
 
-def checkForView(latLng, pitch, size):
+def checkForView(latLng):
 	## Takes tuple of lat, long and returns True if street view imagery exists
 	request = {
 		'prefix' : STREETVIEW_METADATA_API_PREFIX,
@@ -25,7 +25,7 @@ def checkForView(latLng, pitch, size):
 	
 	
 	
-def getViewResponse(latLong):
+def getViewResponse(latLng):
 	## Takes tuple of lat, long and gets Street View response
 	
 	request = {
