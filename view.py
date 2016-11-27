@@ -1,5 +1,10 @@
-from config import STREETVIEW_API_KEY, STREETVIEW_API_PREFIX, STREETVIEW_METADATA_API_PREFIX, STREETVIEW_PITCH, STREETVIEW_SIZE
-import urllib.request, json
+from config import STREETVIEW_API_KEY, STREETVIEW_API_PREFIX, STREETVIEW_METADATA_API_PREFIX, STREETVIEW_PITCH, STREETVIEW_SIZE, AWS_S3_BUCKET, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+import urllib.request, json, io
+
+storageConnection = S3Connection()
+datastore = storageConnection.get_bucket(AWS_S3_BUCKET)
 
 def checkForView(latLng):
 	## Takes tuple of lat, long and returns True if street view imagery exists
@@ -25,7 +30,7 @@ def checkForView(latLng):
 	
 	
 	
-def getViewResponse(latLng):
+def getViewRequest(latLng):
 	## Takes tuple of lat, long and gets Street View response
 	
 	request = {
@@ -40,4 +45,15 @@ def getViewResponse(latLng):
 	
 	return requestURL
 
+def getViewObject(latLng):
+	## Takes tuple of lat/lng and returns image object
+	if checkForView(latLng):
+		with urllib.request.urlopen(getViewRequest(latLng)) as response:
+			image = response.read()
+			
+		imageObj = io.BytesIO(image)
+		
+		return imageObj
+		
+	return False
 	
