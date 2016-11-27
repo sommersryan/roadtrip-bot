@@ -11,6 +11,7 @@ MAX_LONGITUDE = os.environ.get('MAX_LONGITUDE') or ''
 
 DIRECTIONS_API_PREFIX = 'https://maps.googleapis.com/maps/api/directions/json?'
 STREETVIEW_API_PREFIX = 'https://maps.googleapis.com/maps/api/streetview?'
+STREETVIEW_METADATA_API_PREFIX = 'https://maps.googleapis.com/maps/api/streetview/metadata?'
 GEOCODING_API_PREFIX = 'https://maps.googleapis.com/maps/api/geocode/json?'
 
 #API Keys
