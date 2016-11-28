@@ -13,16 +13,16 @@ while True:
 	
 	for step in newTrip.legs[0].steps:
 		
-		tweet = 'Driving: {0}'.format(step.asString())
+		stepTweet = 'Driving: {0}'.format(step.asString())
 		
 		if view.checkForView(step.start.coord):
 			
 			image = view.getViewObject(step.start.coord)
-			tweet.makeTweetWithImage(tweet,image)
+			tweet.makeTweetWithImage(stepTweet,image)
 			time.sleep(int(step.duration['value']))
 			continue
 		
-		tweet.makeTweet(tweet)
+		tweet.makeTweet(stepTweet)
 	
 	time.sleep(60)
 	
