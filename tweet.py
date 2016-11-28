@@ -6,9 +6,13 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 
 api = tweepy.API(auth)
 
-def makeTweetWithImage(status, image, replyTo):
+def makeTweetWithImage(status, image, replyTo=None):
 ## Takes text status and image object and tweets it
-	api.update_with_media(filename='view.jpg', status=status, in_reply_to_status_id=replyTo, file=image)
+	if replyTo:
+		api.update_with_media(filename='view.jpg', status=status, in_reply_to_status_id=replyTo, file=image)
+		return True
+	
+	api.update_with_media(filename='view.jpg', status=status, file=image)
 	return True
 	
 def makeTweet(status,replyTo=None):
@@ -18,3 +22,4 @@ def makeTweet(status,replyTo=None):
 		return True
 	
 	api.update_status(status=status)
+	return True
