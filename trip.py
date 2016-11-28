@@ -3,70 +3,51 @@ from config import DIRECTIONS_API_PREFIX, DIRECTIONS_API_KEY
 
 class Trip(object):
 	
-	def __init__(self, startLocation, endLocation, legs = [], waypoints = []):
-		self.startLocation = startLocation
-		self.endLocation = endLocation
-		self.startText = map.revGeocode(startLocation)
-		self.endText = map.revGeocode(endLocation)
+	def __init__(self, start = map.Place(), end = map.Place(), legs = []):
+		self.start = start
+		self.end = end
 		self.legs = legs
-		self.waypoints = waypoints
 	
 	@classmethod
-	def fromTripDict(cls, trip):
+	def fromPlan(cls, plan):
 		
-		request = getDirectionsURL(trip)
+		request = getDirectionsURL(plan)
 		jsonResponse = getDirectionsResponse(request)
 			
-		startLocation = trip['origin']['latLong']
-		endLocation = trip['destination']['latLong']
-		
-		waypoints = []
-		
-		for key, value in trip.items():
-			if key.startswith('waypoint'):
-				waypoints.append(value)
+		start = plan.origin
+		end = plan.destination
 		
 		legs = []
 		
 		for leg in jsonResponse['routes'][0]['legs']:
 			legs.append(Leg.fromJSON(leg))
 		
-		inst = cls(startLocation, endLocation, legs, waypoints)
+		inst = cls(start, end, legs)
 		
 		return inst
 		
 	def __repr__(self):
 	
-		return '<{0} to {1}>'.format(self.startText, self.endText)
+		return '<{0} to {1}>'.format(self.start.highDetail, self.end.highDetail)
 		
 	def __str__(self):
-	
-		waypointText = ''
-	
-		if self.waypoints:
-			waypointText = 'by way of '
-			for waypoint in self.waypoints:
-				t = waypoint['placeName']
-				waypointText += '{0}, '.format(t)
-				
-		return 'From {0} to {1} {2}'.format(self.startText, self.endText, waypointText)
+
+		return 'From {0} to {1} {2}'.format(self.start.highDetail, self.end.highDetail)
 	
 	
 class Leg(object):
 
-	def __init__(self, steps = [], startLocation =(), endLocation =(), distance = {}, duration = {}):
+	def __init__(self, steps = [], start = map.Place(), end = map.Place(), distance = {}, duration = {}):
 		self.steps = steps
-		self.startLocation = startLocation
-		self.endLocation = endLocation
-		self.startText = map.revGeocode(startLocation)
-		self.endText = map.revGeocode(endLocation)
+		self.start = start
+		self.end = end
 		self.distance = distance
 		self.duration = duration
 		
 	@classmethod
 	def fromJSON(cls, jsonObject):
-		startLocation = (jsonObject['start_location']['lat'], jsonObject['start_location']['lng'])
-		endLocation = (jsonObject['end_location']['lat'], jsonObject['end_location']['lng'])
+		start = map.Place(jsonObject['start_location']['lat'], jsonObject['start_location']['lng'])
+		end = map.Place(jsonObject['end_location']['lat'], jsonObject['end_location']['lng'])
 		distance = jsonObject['distance']
 		duration = jsonObject['duration']
 		
@@ -75,15 +56,15 @@ class Leg(object):
 		for step in jsonObject['steps']:
 			steps.append(Step.fromJSON(step))
 		
-		inst = cls(steps, startLocation, endLocation, distance, duration)
+		inst = cls(steps, start, end, distance, duration)
 		
 		return inst
 		
 	def asString(self):
 		legString = ''
-		legString += map.revGeocode(self.startLocation)
+		legString += self.start.mediumDetail
 		legString += ' to '
-		legString += map.revGeocode(self.endLocation)
+		legString += self.end.mediumDetail
 		legString += ', '
 		legString += self.distance['text']
 		legString += ', '
@@ -92,19 +73,17 @@ class Leg(object):
 		return legString
 	
 	def __repr__(self):
-		return '<{0}, {1}, {2}>'.format(self.startText, self.endText, self.distance['text'])
+		return '<{0}, {1}, {2}>'.format(self.start.mediumDetail, self.end.mediumDetail, self.distance['text'])
 		
 	def __str__(self):
 		return self.asString()
 
 class Step(object):
 
-	def __init__(self, htmlInstructions = '', startLocation = (), endLocation = (), distance = {}, duration = {}, maneuver = ''):
+	def __init__(self, htmlInstructions = '', start = map.Place(), end = map.Place(), distance = {}, duration = {}, maneuver = ''):
 		self.htmlInstructions = htmlInstructions
-		self.startLocation = startLocation
-		self.startText = map.revGeocode(startLocation)
-		self.endLocation = endLocation
-		self.endText = map.revGeocode(endLocation)
+		self.start = start
+		self.end = end
 		self.distance = distance
 		self.duration = duration
 		self.maneuver = maneuver
@@ -112,8 +91,8 @@ class Step(object):
 	@classmethod
 	def fromJSON(cls, jsonObject):
 		htmlInstructions = jsonObject['html_instructions']
-		startLocation = (jsonObject['start_location']['lat'], jsonObject['start_location']['lng'])
-		endLocation = (jsonObject['end_location']['lat'], jsonObject['end_location']['lng'])
+		start = map.Place(jsonObject['start_location']['lat'], jsonObject['start_location']['lng'])
+		end = map.Place(jsonObject['end_location']['lat'], jsonObject['end_location']['lng'])
 		distance = jsonObject['distance']
 		duration = jsonObject['duration']
 		
@@ -122,7 +101,7 @@ class Step(object):
 		if jsonObject.get('maneuver'):
 			maneuver = jsonObject['maneuver']
 
-		inst = cls(htmlInstructions, startLocation, endLocation, distance, duration, maneuver)
+		inst = cls(htmlInstructions, start, end, distance, duration, maneuver)
 		
 		return inst
 		
@@ -137,30 +116,17 @@ class Step(object):
 	def __repr__(self):
 		return '<{0}, {1}>'.format(self.maneuver, self.distance['text'])
 
-def getDirectionsURL(trip, avoidHighways=True):
-	## takes Trip dict from buildTrip, checks for waypoints, builds request and gets response
-	
-	waypoints = []
-	
-	for key, value in trip.items():
-		if key.startswith('waypoint'):
-			waypoints.append(value['latLong'])
-	
+def getDirectionsURL(plan, avoidHighways=True):
+	## takes map.Plan, builds request and gets response
+
 	request = {
 		'prefix' : DIRECTIONS_API_PREFIX,
-		'origin' : trip['origin']['latLong'],
-		'destination' : trip['destination']['latLong'],
-		'waypoints' : waypoints,
+		'origin' : plan.origin.coord,
+		'destination' : plan.destination.coord,
 		'key' : DIRECTIONS_API_KEY }
 
 	requestURL = '{prefix}origin={origin[0]},{origin[1]}&destination={destination[0]},{destination[1]}'.format(**request)
-		
-	if waypoints:
-		requestURL += '&waypoints='
-			
-		for waypoint in waypoints:
-			requestURL+= 'via:{0[0]}%2c{0[1]}%7c'.format(waypoint)
-			#requestURL +=  '{0}[0],{0}[1]|'.format(waypoint)
+
 	if avoidHighways:
 	
 		requestURL += '&avoid=highways'

@@ -1,25 +1,49 @@
 import random, json, urllib.request
 from config import MIN_LATITUDE, MAX_LATITUDE, MIN_LONGITUDE, MAX_LONGITUDE, GEOCODING_API_PREFIX, GEOCODING_API_KEY
 
-def randomLocation():
-	## Returns tuple of randomly selected lat/long point
-	lat = round(random.uniform(float(MIN_LATITUDE), float(MAX_LATITUDE)),6)
-	long = round(random.uniform(float(MIN_LONGITUDE), float(MAX_LONGITUDE)), 6)
-	return (lat,long)
+class Plan(object):
+	#A plan represents a proposed trip; these can be fed to Directions API to produce a Trip object
+	def __init__(self, origin, destination):
+		self.origin = origin
+		self.destination = destination
+
+	@classmethod
+	def random(cls):
+		while True:
+			origin = Place.random()
+			destination =  Place.random()
+			
+			if origin.valid and destination.valid:
+				inst = cls(origin,destination)
+				return inst
+			
+class Place(object):
 	
-def buildTrip():
-	## Selects a destination and origin and builds dict to return
-	originLatLong = randomLocation()
-	origin = { 'latLong' : originLatLong, 'placeName' : revGeocode(originLatLong) }
-	destinationLatLong = randomLocation()
-	destination = { 'latLong' : destinationLatLong, 'placeName' : revGeocode(destinationLatLong) }
-	trip = { 'origin' : origin, 'destination' : destination }
-	return trip
+	def __init__(self, latitude=0, longitude=0):
+		self.latitude = latitude
+		self.longitude = longitude
+		self.coord = (latitude, longitude)
+		
+		geo = getGeoCodeResponse((latitude, longitude))
+		
+		if geo['status'] == 'ZERO_RESULTS':
+			self.valid = False
+			self.lowDetail = ''
+			self.mediumDetail = ''
+			self.highDetail = ''
+			
+		else:
+			self.valid = True
+			self.lowDetail = geo['results'][2]['formatted_address']
+			self.mediumDetail = geo['results'][1]['formatted_address']
+			self.highDetail = geo['results'][0]['formatted_address']
 	
-def revGeocode(latLong):
-	## Takes a tuple of latitude, longitude and returns string of place name
-	response = getGeoCodeResponse(latLong)
-	return parseGeoCodeResponse(response)
+	@classmethod
+	def random(cls):
+		lat = round(random.uniform(float(MIN_LATITUDE), float(MAX_LATITUDE)),6)
+		long = round(random.uniform(float(MIN_LONGITUDE), float(MAX_LONGITUDE)), 6)
+		inst = cls(lat,long)
+		return inst		
 
 def getGeoCodeResponse(latLong):
 	## Takes a tuple of latitude, longitude, builds request and gets geocode data	
@@ -38,30 +62,3 @@ def getGeoCodeResponse(latLong):
 	parsed = json.loads(geoData)
 	
 	return parsed
-	
-def parseGeoCodeResponse(response):
-	## Parses a response from getGeoCodeResponse
-	if not 'results' in response:
-		return None
-	
-	if len(response['results']) > 1:
-		return response['results'][1]['formatted_address']
-		
-	else:
-		return response['results'][0]['formatted_address']
-	
-
-def generateWaypoints(num):
-	## Generator for num waypoints
-	for i in range(0,num):
-		latLong = randomLocation()
-		placeName = revGeocode(latLong)
-		waypoint = { 'latLong' : latLong, 'placeName' : placeName }
-		yield waypoint
-
-def addWaypoints(trip, numWaypoints):
-	## Adds waypoints to trip
-	for i in enumerate(generateWaypoints(numWaypoints)):
-		trip.update({'waypoint' + str(i[0]) : i[1]})
-	
-	return trip

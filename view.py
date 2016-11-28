@@ -3,9 +3,6 @@ from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 import urllib.request, json, io
 
-storageConnection = S3Connection()
-datastore = storageConnection.get_bucket(AWS_S3_BUCKET)
-
 def checkForView(latLng):
 	## Takes tuple of lat, long and returns True if street view imagery exists
 	request = {
