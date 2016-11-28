@@ -11,7 +11,10 @@ def makeTweetWithImage(status, image, replyTo):
 	api.update_with_media(filename='view.jpg', status=status, in_reply_to_status_id=replyTo, file=image)
 	return True
 	
-def makeTweet(status,replyTo):
+def makeTweet(status,replyTo=None):
 ## Takes text status and tweets it
-	api.update_status(status=status, in_reply_to_status_id=replyTo)
-	return True
+	if replyTo:
+		api.update_status(status=status, in_reply_to_status_id=replyTo)
+		return True
+	
+	api.update_status(status=status)
