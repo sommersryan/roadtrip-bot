@@ -23,9 +23,11 @@ GEOCODING_API_KEY = os.environ.get('GEOCODING_API_KEY')
 STREETVIEW_PITCH = '0'
 STREETVIEW_SIZE = '600x300'
 
-#Minimum interval in minutes between tweets
+#Won't tweet more than once per MINIMUM_TWEET_INTERVAL in seconds,
+#unless this step is longer than MINIMUM_OVERRIDE_DURATION in seconds
 
-MINIMUM_INTERVAL = 180
+MINIMUM_OVERRIDE_DURATION = 3600
+MINIMUM_TWEET_INTERVAL = 1500
 
 AWS_S3_BUCKET = os.environ.get('AWS_S3_BUCKET') or ''
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID") or ''
