@@ -23,3 +23,8 @@ def makeTweet(status,replyTo=None):
 	
 	api.update_status(status=status)
 	return 'Tweeted {0}'.format(status)
+	
+def getPreviousID():
+## Gets status ID for authenticated user's previous tweet
+	statusID = api.user_timeline(count=1)[0].id_str
+	return statusID

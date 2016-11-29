@@ -1,4 +1,5 @@
 import map, trip, view, tweet, time
+from config import MINIMUM_OVERRIDE_DURATION, MINIMUM_TWEET_INTERVAL
 
 while True:
 	
@@ -11,21 +12,34 @@ while True:
 	
 	time.sleep(60)
 	
+	previousInterval = MINIMUM_TWEET_INTERVAL + 1
+	
 	for step in newTrip.legs[0].steps:
+	
+		replyTo = tweet.getPreviousID()
 		
-		stepTweet = 'Driving: {0}'.format(step.asString())
-		
-		if view.checkForView(step.start.coord):
+		if previousInterval >= MINIMUM_TWEET_INTERVAL or step.duration['value'] >= MINIMUM_OVERRIDE_DURATION:
 			
-			image = view.getViewObject(step.start.coord)
-			tweet.makeTweetWithImage(stepTweet,image)
-			time.sleep(int(step.duration['value']))
-			continue
+			previousInterval = step.duration['value']
+			stepTweet = 'Driving: {0}'.format(step.asString())
 		
-		tweet.makeTweet(stepTweet)
+			if view.checkForView(step.start.coord):
+			
+				image = view.getViewObject(step.start.coord)
+				tweet.makeTweetWithImage(stepTweet,image,replyTo)
+				time.sleep(int(step.duration['value']))
+				continue
+			
+			tweet.makeTweet(stepTweet,replyTo=replyTo)
+		
+		previousInterval = step.duration['value']
 	
 	time.sleep(60)
 	
-	signOut = 'Trip complete! Resting in {0} for a bit.'.format(newTrip.start.mediumDetail)
+	signOut = 'Trip complete! {0} traveled. Resting in {1} for a bit.'.format(newTrip.legs[0].distance['text'],newTrip.end.mediumDetail)
+	
+	replyTo = tweet.getPreviousID()
+	
+	tweet.makeTweet(signOut,replyTo=replyTo)
 	
 	time.sleep(14400)
