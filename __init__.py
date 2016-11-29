@@ -20,7 +20,7 @@ while True:
 		
 		if previousInterval >= MINIMUM_TWEET_INTERVAL or step.duration['value'] >= MINIMUM_OVERRIDE_DURATION:
 			
-			previousInterval = step.duration['value']
+			previousInterval = int(step.duration['value'])
 			stepTweet = 'Driving: {0}'.format(step.asString())
 		
 			if view.checkForView(step.start.coord):
@@ -32,7 +32,7 @@ while True:
 			
 			tweet.makeTweet(stepTweet,replyTo=replyTo)
 		
-		previousInterval = step.duration['value']
+		previousInterval = int(step.duration['value'])
 	
 	time.sleep(60)
 	
