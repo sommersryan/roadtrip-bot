@@ -18,7 +18,7 @@ while True:
 	
 		replyTo = tweet.getPreviousID()
 		
-		if previousInterval >= MINIMUM_TWEET_INTERVAL or step.duration['value'] >= MINIMUM_OVERRIDE_DURATION:
+		if previousInterval >= MINIMUM_TWEET_INTERVAL or int(step.duration['value']) >= MINIMUM_OVERRIDE_DURATION:
 			
 			previousInterval = int(step.duration['value'])
 			stepTweet = 'Driving: {0}'.format(step.asString())
@@ -31,8 +31,10 @@ while True:
 				continue
 			
 			tweet.makeTweet(stepTweet,replyTo=replyTo)
+			time.sleep(int(step.duration['value']))
 		
 		previousInterval = int(step.duration['value'])
+		time.sleep(int(step.duration['value']))
 	
 	time.sleep(60)
 	
