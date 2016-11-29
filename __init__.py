@@ -6,7 +6,8 @@ while True:
 	newPlan = map.Plan.random()
 	newTrip = trip.Trip.fromPlan(newPlan)
 	
-	preamble = 'New trip! {0} to {1}. {2}, {3}'.format(newTrip.start.mediumDetail, newTrip.end.mediumDetail, newTrip.legs[0].distance['text'], newTrip.legs[0].duration['text'])
+	preamble = 'New trip! {0} to {1}. {2}, {3}'.format(newTrip.start.mediumDetail, 
+		newTrip.end.mediumDetail, newTrip.legs[0].distance['text'], newTrip.legs[0].duration['text'])
 	
 	tweet.makeTweet(preamble)
 	
@@ -18,10 +19,12 @@ while True:
 	
 		replyTo = tweet.getPreviousID()
 		
+		locationURL = 'https://maps.google.com?q={0[0]},{0[1]}'.format(step.start.coord)
+		
 		if previousInterval >= MINIMUM_TWEET_INTERVAL or int(step.duration['value']) >= MINIMUM_OVERRIDE_DURATION:
 			
 			previousInterval = int(step.duration['value'])
-			stepTweet = 'Driving: {0}'.format(step.asString())
+			stepTweet = 'Driving: {0} {1}'.format(step.asString(), locationURL)
 		
 			if view.checkForView(step.start.coord):
 			
