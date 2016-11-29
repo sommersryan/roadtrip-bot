@@ -37,7 +37,9 @@ class Place(object):
 			self.lowDetail = ''
 			if len(geo['results']) >= 2:
 				self.lowDetail = geo['results'][2]['formatted_address']
-			self.mediumDetail = geo['results'][1]['formatted_address']
+			self.mediumDetail = ''
+			if len(geo['results']) >= 1:
+				self.mediumDetail = geo['results'][1]['formatted_address']
 			self.highDetail = geo['results'][0]['formatted_address']
 	
 	@classmethod

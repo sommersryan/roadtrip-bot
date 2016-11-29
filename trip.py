@@ -107,7 +107,9 @@ class Step(object):
 		
 	def asString(self):
 		#change commands to verbs here? 
-		cleanString = re.sub('<[^<]+?>', '', self.htmlInstructions)
+		divBeginOut = re.sub('<div[^>]*>', '\r', self.htmlInstructions)
+		divEndOut = re.sub('</div>', '', divBeginOut)
+		cleanString = re.sub('<[^<]+?>', '', divEndOut)
 		return cleanString
 	
 	def __str__(self):
