@@ -18,12 +18,12 @@ class Plan(object):
 				return inst
 	
 	@classmethod
-	def toRandom(cls, origin=map.Place()):
+	def toRandom(cls, origin=Place()):
 		while True:
 			origin = origin
 			destination = Place.random()
 			
-			if origin.valid and destination.valid:
+			if destination.valid:
 				inst = cls(origin,destination)
 				return inst
 			
