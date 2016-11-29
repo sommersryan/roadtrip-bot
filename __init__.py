@@ -9,7 +9,7 @@ while True:
 	preamble = 'New trip! {0} to {1}. {2}, {3}'.format(newTrip.start.mediumDetail, 
 		newTrip.end.mediumDetail, newTrip.legs[0].distance['text'], newTrip.legs[0].duration['text'])
 	
-	tweet.makeTweet(preamble)
+	tweet.makeTweet(status=preamble, lat=newTrip.start.coord[0], long=newTrip.start.coord[1])
 	
 	time.sleep(60)
 	
@@ -29,11 +29,11 @@ while True:
 			if view.checkForView(step.start.coord):
 			
 				image = view.getViewObject(step.start.coord)
-				tweet.makeTweetWithImage(stepTweet,image,replyTo)
+				tweet.makeTweetWithImage(stepTweet, image, replyTo, lat=step.start.coord[0], long=step.start.coord[1])
 				time.sleep(int(step.duration['value']))
 				continue
 			
-			tweet.makeTweet(stepTweet,replyTo=replyTo)
+			tweet.makeTweet(stepTweet,replyTo=replyTo, lat=step.start.coord[0], long=step.start.coord[1])
 			time.sleep(int(step.duration['value']))
 		
 		previousInterval = int(step.duration['value'])
@@ -45,6 +45,6 @@ while True:
 	
 	replyTo = tweet.getPreviousID()
 	
-	tweet.makeTweet(signOut,replyTo=replyTo)
+	tweet.makeTweet(signOut,replyTo=replyTo, lat=newTrip.end.coord[0], long=newTrip.end.coord[1])
 	
 	time.sleep(14400)
