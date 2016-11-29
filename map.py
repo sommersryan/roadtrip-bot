@@ -1,33 +1,24 @@
 import random, json, urllib.request
 from config import MIN_LATITUDE, MAX_LATITUDE, MIN_LONGITUDE, MAX_LONGITUDE, GEOCODING_API_PREFIX, GEOCODING_API_KEY
 
-class Plan(object):
-	#A plan represents a proposed trip; these can be fed to Directions API to produce a Trip object
-	def __init__(self, origin, destination):
-		self.origin = origin
-		self.destination = destination
+def getGeoCodeResponse(latLong):
+	## Takes a tuple of latitude, longitude, builds request and gets geocode data	
+	request = { 
+		'prefix' : GEOCODING_API_PREFIX,
+		'latitude' : latLong[0], 
+		'longitude' : latLong[1], 
+		'key' : GEOCODING_API_KEY
+		}
+	
+	requestURL = '{prefix}latlng={latitude},{longitude}&key={key}'.format(**request)
+	
+	with urllib.request.urlopen(requestURL) as response:
+		geoData = response.read().decode('utf8')
+	
+	parsed = json.loads(geoData)
+	
+	return parsed
 
-	@classmethod
-	def random(cls):
-		while True:
-			origin = Place.random()
-			destination = Place.random()
-			
-			if origin.valid and destination.valid:
-				inst = cls(origin,destination)
-				return inst
-	
-	@classmethod
-	def toRandom(cls, origin=Place()):
-		while True:
-			origin = origin
-			destination = Place.random()
-			
-			if destination.valid:
-				inst = cls(origin,destination)
-				return inst
-			
-	
 class Place(object):
 	
 	def __init__(self, latitude=39.828194, longitude=-98.580100):
@@ -58,22 +49,31 @@ class Place(object):
 		lat = round(random.uniform(float(MIN_LATITUDE), float(MAX_LATITUDE)),6)
 		long = round(random.uniform(float(MIN_LONGITUDE), float(MAX_LONGITUDE)), 6)
 		inst = cls(lat,long)
-		return inst		
+		return inst
 
-def getGeoCodeResponse(latLong):
-	## Takes a tuple of latitude, longitude, builds request and gets geocode data	
-	request = { 
-		'prefix' : GEOCODING_API_PREFIX,
-		'latitude' : latLong[0], 
-		'longitude' : latLong[1], 
-		'key' : GEOCODING_API_KEY
-		}
+class Plan(object):
+	#A plan represents a proposed trip; these can be fed to Directions API to produce a Trip object
+	def __init__(self, origin, destination):
+		self.origin = origin
+		self.destination = destination
+
+	@classmethod
+	def random(cls):
+		while True:
+			origin = Place.random()
+			destination = Place.random()
+			
+			if origin.valid and destination.valid:
+				inst = cls(origin,destination)
+				return inst
 	
-	requestURL = '{prefix}latlng={latitude},{longitude}&key={key}'.format(**request)
-	
-	with urllib.request.urlopen(requestURL) as response:
-		geoData = response.read().decode('utf8')
-	
-	parsed = json.loads(geoData)
-	
-	return parsed
+	@classmethod
+	def toRandom(cls, origin=Place()):
+		while True:
+			origin = origin
+			destination = Place.random()
+			
+			if destination.valid:
+				inst = cls(origin,destination)
+				return inst		
+
