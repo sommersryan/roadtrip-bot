@@ -30,7 +30,7 @@ class Plan(object):
 	
 class Place(object):
 	
-	def __init__(self, latitude=0, longitude=0):
+	def __init__(self, latitude=39.828194, longitude=-98.580100):
 		self.latitude = latitude
 		self.longitude = longitude
 		self.coord = (latitude, longitude)
