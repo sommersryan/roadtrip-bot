@@ -11,12 +11,23 @@ class Plan(object):
 	def random(cls):
 		while True:
 			origin = Place.random()
-			destination =  Place.random()
+			destination = Place.random()
+			
+			if origin.valid and destination.valid:
+				inst = cls(origin,destination)
+				return inst
+	
+	@classmethod
+	def toRandom(cls, origin=map.Place()):
+		while True:
+			origin = origin
+			destination = Place.random()
 			
 			if origin.valid and destination.valid:
 				inst = cls(origin,destination)
 				return inst
 			
+	
 class Place(object):
 	
 	def __init__(self, latitude=0, longitude=0):
