@@ -1,5 +1,5 @@
-import tweepy
-from config import CONSUMER_SECRET, CONSUMER_KEY, ACCESS_TOKEN, ACCESS_SECRET
+import tweepy, urllib.parse, urllib.request, json
+from config import CONSUMER_SECRET, CONSUMER_KEY, ACCESS_TOKEN, ACCESS_SECRET, BITLY_PREFIX, BITLY_TOKEN
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
@@ -28,3 +28,19 @@ def getPreviousID():
 ## Gets status ID for authenticated user's previous tweet
 	statusID = api.user_timeline(count=1)[0].id_str
 	return statusID
+	
+def urlShorten(url):
+## Shortens URL with Bitly
+	values = {'longUrl' : url}
+	data = urllib.parse.urlencode(values)
+	req = urllib.request.Request('{0}access_token={1}&{2}&format=txt'.format(BITLY_PREFIX, BITLY_TOKEN, data))
+	
+	with urllib.request.urlopen(req) as response:
+		shortened = response.read().strip()
+		
+	return shortened
+	
+	
+	
+	
+	

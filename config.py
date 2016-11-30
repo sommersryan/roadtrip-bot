@@ -13,12 +13,14 @@ DIRECTIONS_API_PREFIX = 'https://maps.googleapis.com/maps/api/directions/json?'
 STREETVIEW_API_PREFIX = 'https://maps.googleapis.com/maps/api/streetview?'
 STREETVIEW_METADATA_API_PREFIX = 'https://maps.googleapis.com/maps/api/streetview/metadata?'
 GEOCODING_API_PREFIX = 'https://maps.googleapis.com/maps/api/geocode/json?'
+BITLY_PREFIX = 'https://api-ssl.bitly.com/v3/shorten?'
 
 #API Keys
 
 DIRECTIONS_API_KEY = os.environ.get('DIRECTIONS_API_KEY')
 STREETVIEW_API_KEY = os.environ.get('STREETVIEW_API_KEY')
 GEOCODING_API_KEY = os.environ.get('GEOCODING_API_KEY')
+BITLY_TOKEN = os.environ.get('BITLY_TOKEN')
 
 STREETVIEW_PITCH = '0'
 STREETVIEW_SIZE = '640x640'

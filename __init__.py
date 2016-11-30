@@ -26,6 +26,8 @@ while True:
 		
 		mapURL = 'https://www.google.com/maps/dir/{0[0]},{0[1]}/{1[0]},{1[1]}/{2[0]},{2[1]}/am=t/data=4m4!4m3!2m1!1b1!3e0'.format(
 			newTrip.start.coord, step.start.coord, newTrip.end.coord)
+			
+		shortURL = tweet.urlShorten(mapURL)
 		
 		if previousInterval >= MINIMUM_TWEET_INTERVAL or int(step.duration['value']) >= MINIMUM_OVERRIDE_DURATION:
 			
