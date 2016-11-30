@@ -19,12 +19,10 @@ while True:
 	
 		replyTo = tweet.getPreviousID()
 		
-		locationURL = 'https://maps.google.com?q={0[0]},{0[1]}'.format(step.start.coord)
-		
 		if previousInterval >= MINIMUM_TWEET_INTERVAL or int(step.duration['value']) >= MINIMUM_OVERRIDE_DURATION:
 			
 			previousInterval = int(step.duration['value'])
-			stepTweet = 'Driving: {0} {1}'.format(step.asString(), locationURL)
+			stepTweet = 'Driving: {0}'.format(step.asString())
 		
 			if view.checkForView(step.start.coord):
 			
