@@ -35,7 +35,7 @@ while True:
 			stepTweet = 'Driving: {0}'.format(step.asString())
 		
 			if view.checkForView(step.start.coord):
-			
+				stepTweet += shortURL
 				image = view.getViewObject(step.start.coord)
 				tweet.makeTweetWithImage(stepTweet, image, replyTo, lat=step.start.coord[0], long=step.start.coord[1])
 				time.sleep(int(step.duration['value']))
