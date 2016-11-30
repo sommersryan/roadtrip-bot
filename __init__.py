@@ -1,9 +1,14 @@
 import map, trip, view, tweet, time
 from config import MINIMUM_OVERRIDE_DURATION, MINIMUM_TWEET_INTERVAL
 
+newPlan = map.Plan.random()
+departurePoint = None
+
 while True:
 	
-	newPlan = map.Plan.random()
+	if departurePoint:
+		newPlan = map.Plan.toRandom(departurePoint)
+	
 	newTrip = trip.Trip.fromPlan(newPlan)
 	
 	preamble = 'New trip! {0} to {1}. {2}, {3}'.format(newTrip.start.mediumDetail, 
@@ -44,5 +49,7 @@ while True:
 	replyTo = tweet.getPreviousID()
 	
 	tweet.makeTweet(signOut,replyTo=replyTo, lat=newTrip.end.coord[0], long=newTrip.end.coord[1])
+	
+	departurePoint = newTrip.end
 	
 	time.sleep(14400)
