@@ -11,8 +11,13 @@ while True:
 	
 	newTrip = trip.Trip.fromPlan(newPlan)
 	
-	preamble = 'New trip! {0} to {1}. {2}, {3}'.format(newTrip.start.mediumDetail, 
-		newTrip.end.mediumDetail, newTrip.legs[0].distance['text'], newTrip.legs[0].duration['text'])
+	tripURL = 'https://www.google.com/maps/dir/{0[0]},{0[1]}/{1[0]},{1[1]}/am=t/data=4m4!4m3!2m1!1b1!3e0'.format(
+			newTrip.start.coord, newTrip.end.coord)
+			
+	shortTripURL = tweet.urlShorten(tripURL)
+	
+	preamble = 'New trip! {0} to {1}. {2}, {3} {4}'.format(newTrip.start.mediumDetail, 
+		newTrip.end.mediumDetail, newTrip.legs[0].distance['text'], newTrip.legs[0].duration['text'], shortTripURL)
 	
 	tweet.makeTweet(status=preamble, lat=newTrip.start.coord[0], long=newTrip.start.coord[1])
 	
