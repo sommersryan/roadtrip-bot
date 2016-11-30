@@ -36,7 +36,7 @@ def urlShorten(url):
 	req = urllib.request.Request('{0}access_token={1}&{2}&format=txt'.format(BITLY_PREFIX, BITLY_TOKEN, data))
 	
 	with urllib.request.urlopen(req) as response:
-		shortened = response.read().strip()
+		shortened = response.read().strip().decode('utf8')
 		
 	return shortened
 	
