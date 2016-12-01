@@ -47,7 +47,7 @@ while True:
 	
 	for step in newTrip.legs[0].steps:
 		
-		logging.info("New step: {0} to {1}".format(step.start.coord,step.end.coord))
+		logging.info("New step: {0} to {1}, duration {2} seconds".format(step.start.coord,step.end.coord, step.duration['value']))
 		
 		replyTo = tweet.getPreviousID()
 		
@@ -79,8 +79,8 @@ while True:
 			logging.info("Tweet posted. Sleeping for {0} seconds".format(step.duration['value']))
 			time.sleep(int(step.duration['value']))
 		
-		logging.info("Tweet not permitted for this step. Sleeping for {0}".format(step.duration['value']))
 		previousInterval = int(step.duration['value'])
+		logging.info("Tweet not permitted for this step. Sleeping for {0}".format(step.duration['value']))
 		time.sleep(int(step.duration['value']))
 	
 	time.sleep(60)
