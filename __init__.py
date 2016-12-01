@@ -15,7 +15,7 @@ while True:
 	
 	newTrip = trip.Trip.fromPlan(newPlan)
 	
-	logging.info("Response obtained. {0} steps.".format(len(newTrip.legs[0].steps))
+	logging.info("Response obtained. {0} steps.".format(len(newTrip.legs[0].steps)))
 	
 	tripURL = 'https://www.google.com/maps/dir/{0[0]},{0[1]}/{1[0]},{1[1]}/am=t/data=4m4!4m3!2m1!1b1!3e0'.format(
 			newTrip.start.coord, newTrip.end.coord)

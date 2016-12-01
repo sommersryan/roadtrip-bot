@@ -28,7 +28,7 @@ class Place(object):
 		
 		geo = getGeoCodeResponse((latitude, longitude))
 		
-		if geo['status'] == 'ZERO_RESULTS':
+		if geo['status'] != 'OK':
 			self.valid = False
 			self.lowDetail = ''
 			self.mediumDetail = ''
