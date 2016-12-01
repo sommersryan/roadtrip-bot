@@ -37,10 +37,10 @@ class Place(object):
 		else:
 			self.valid = True
 			self.lowDetail = ''
-			if len(geo['results']) >= 2:
+			if len(geo['results']) >= 3:
 				self.lowDetail = geo['results'][2]['formatted_address']
 			self.mediumDetail = ''
-			if len(geo['results']) >= 1:
+			if len(geo['results']) >= 2:
 				self.mediumDetail = geo['results'][1]['formatted_address']
 			self.highDetail = geo['results'][0]['formatted_address']
 	
