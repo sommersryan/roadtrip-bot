@@ -60,7 +60,7 @@ while True:
 		
 		if previousInterval >= MINIMUM_TWEET_INTERVAL or int(step.duration['value']) >= MINIMUM_OVERRIDE_DURATION:
 			
-			logging.info("Tweet permitted for this step permitted.")
+			logging.info("Tweet permitted for this step.")
 			
 			previousInterval = int(step.duration['value'])
 			stepTweet = 'Driving: {0} '.format(step.asString())
@@ -69,6 +69,7 @@ while True:
 			
 			if view.checkForView(step.start.coord):
 				stepTweet += shortURL
+				logging.info("URL added. Tweet length now {0}".format(len(stepTweet)))
 				image = view.getViewObject(step.start.coord)
 				tweet.makeTweetWithImage(stepTweet, image, replyTo, lat=step.start.coord[0], long=step.start.coord[1])
 				logging.info("Tweet posted. Sleeping for {0} seconds".format(step.duration['value']))
