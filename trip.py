@@ -13,7 +13,10 @@ class Trip(object):
 		
 		request = getDirectionsURL(plan)
 		jsonResponse = getDirectionsResponse(request)
-			
+		
+		if jsonResponse['status'] != 'OK':
+			return None
+		
 		start = plan.origin
 		end = plan.destination
 		

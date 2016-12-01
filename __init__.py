@@ -13,7 +13,21 @@ while True:
 	
 	logging.info("Plan made: {0} to {1}".format(newPlan.origin.coord, newPlan.destination.coord))
 	
-	newTrip = trip.Trip.fromPlan(newPlan)
+	while True: 
+		
+		newTrip = trip.Trip.fromPlan(newPlan)
+		
+		if newTrip:
+			break
+		
+		elif departurePoint:
+			logging.info("Bad response. Making new plan from {0}".format(departurePoint.coord))			
+			newPlan = map.Plan.toRandom(departurePoint)
+		
+		else:
+			logging.info("Bad response. Making new random plan")
+			newPlan = map.Plan.random()
+			 
 	
 	logging.info("Response obtained. {0} steps.".format(len(newTrip.legs[0].steps)))
 	
