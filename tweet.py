@@ -12,8 +12,14 @@ def makeTweetWithImage(status, image, replyTo=None, lat=0, long=0):
 		api.update_with_media(filename='view.jpg', status=status, in_reply_to_status_id=replyTo, lat=lat, long=long, file=image)
 		return 'Tweeted {0}'.format(status)
 	
-	api.update_with_media(filename='view.jpg', status=status, file=image)
-	return 'Tweeted {0}'.format(status)
+	if len(status) <= 140:
+		api.update_with_media(filename='view.jpg', status=status, file=image)
+		return 'Tweeted {0}'.format(status)
+		
+	else:
+		status = status[0:140]
+		api.update_with_media(filename='view.jpg', status=status, file=image)
+		return 'Tweeted {0}'.format(status)
 	
 def makeTweet(status,replyTo=None, lat=0, long=0):
 ## Takes text status and tweets it
@@ -21,8 +27,15 @@ def makeTweet(status,replyTo=None, lat=0, long=0):
 		api.update_status(status=status, in_reply_to_status_id=replyTo, lat=lat, long=long)
 		return 'Tweeted {0}'.format(status)
 	
-	api.update_status(status=status)
-	return 'Tweeted {0}'.format(status)
+	if len(status) <= 140:
+		api.update_status(status=status)
+		return 'Tweeted {0}'.format(status)
+	
+	else: 
+		status = status[0:140]
+		api.update_status(status=status)
+		return 'Tweeted {0}'.format(status)
+
 	
 def getPreviousID():
 ## Gets status ID for authenticated user's previous tweet
