@@ -32,7 +32,9 @@ while True:
 	previousInterval = MINIMUM_TWEET_INTERVAL + 1
 	
 	for step in newTrip.legs[0].steps:
-	
+		
+		logging.info("New step: {0} to {1}".format(step.start.coord,step.end.coord))
+		
 		replyTo = tweet.getPreviousID()
 		
 		mapURL = 'https://www.google.com/maps/dir/{0[0]},{0[1]}/{1[0]},{1[1]}/@{2[0]},{2[1]},14z/am=t/data=4m4!4m3!2m1!1b1!3e0'.format(
