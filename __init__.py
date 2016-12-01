@@ -1,7 +1,7 @@
 import map, trip, view, tweet, time, sys, logging
 from config import MINIMUM_OVERRIDE_DURATION, MINIMUM_TWEET_INTERVAL
 
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 newPlan = map.Plan.random()
 departurePoint = None
