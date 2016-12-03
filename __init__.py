@@ -92,6 +92,6 @@ replyTo = tweet.getPreviousID()
 
 tweet.makeTweet(signOut,replyTo=replyTo, lat=newTrip.end.coord[0], long=newTrip.end.coord[1])
 
-departurePoint = newTrip.end
+static.saveLocation(newTrip.end)
 
 logging.info("Departure point reset to {0}. Exiting.".format(departurePoint.coord))
