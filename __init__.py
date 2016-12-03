@@ -7,7 +7,7 @@ lastLoc = static.getLastLocation()
 
 departurePoint = map.Place(lastLoc[0],lastLoc[1])
 
-logging.info("Retrieved departure point: {0}".format(departurePoint)
+logging.info("Retrieved departure point: {0}".format(departurePoint))
 	
 newPlan = map.Plan.toRandom(departurePoint)
 

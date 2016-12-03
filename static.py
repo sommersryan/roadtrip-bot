@@ -8,4 +8,4 @@ datastore = storageConnection.get_bucket(AWS_S3_BUCKET)
 
 def getLastLocation():
 	rawCoordinates = datastore.get_key('lastlocation').get_contents_as_string().decode('utf8')
-	return tuple([float(a) for a in string.split(',')])
+	return tuple([float(a) for a in rawCoordinates.split(',')])
