@@ -1,5 +1,6 @@
 import map, trip, view, tweet, time, sys, logging, static
 from config import MINIMUM_OVERRIDE_DURATION, MINIMUM_TWEET_INTERVAL
+from urllib.error import HTTPError
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -28,9 +29,13 @@ logging.info("Response obtained. {0} steps.".format(len(newTrip.legs[0].steps)))
 
 tripURL = 'https://www.google.com/maps/dir/{0[0]},{0[1]}/{1[0]},{1[1]}/am=t/data=4m4!4m3!2m1!1b1!3e0'.format(
 		newTrip.start.coord, newTrip.end.coord)
-		
-shortTripURL = tweet.urlShorten(tripURL)
 
+try:		
+	shortTripURL = tweet.urlShorten(tripURL)
+
+except HTTPError:
+	shortTripURL = ''
+	
 preamble = 'New trip! {0} to {1}. {2}, {3} {4}'.format(newTrip.start.mediumDetail, 
 	newTrip.end.mediumDetail, newTrip.legs[0].distance['text'], newTrip.legs[0].duration['text'], shortTripURL)
 
