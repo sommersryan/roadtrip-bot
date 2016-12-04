@@ -106,6 +106,6 @@ tweet.makeTweet(signOut,replyTo=replyTo, lat=newTrip.end.coord[0], long=newTrip.
 
 static.saveLocation(newTrip.end)
 
-logging.info("Departure point reset to {0}. Exiting.".format(departurePoint.coord))
+logging.info("Departure point reset to {0}. Exiting.".format(departurePoint))
 
 static.saveIsTrip(False)

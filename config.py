@@ -22,7 +22,7 @@ STREETVIEW_API_KEY = os.environ.get('STREETVIEW_API_KEY')
 GEOCODING_API_KEY = os.environ.get('GEOCODING_API_KEY')
 BITLY_TOKEN = os.environ.get('BITLY_TOKEN')
 
-STREETVIEW_PITCH = '0'
+STREETVIEW_PITCH = '15'
 STREETVIEW_SIZE = '640x640'
 
 #Won't tweet more than once per MINIMUM_TWEET_INTERVAL in seconds,
