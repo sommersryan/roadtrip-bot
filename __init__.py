@@ -10,7 +10,7 @@ logging.info("Retrieved departure point: {0}".format(departurePoint))
 if static.getIsTrip():
 	logging.info("In progress trip detected. Resuming.")
 	dest = static.getLastDestination()
-	newPlan = map.fromToCoords(departurePoint, dest) 
+	newPlan = map.Plan.fromToCoords(departurePoint, dest) 
 	newTrip = trip.Trip.fromPlan(newPlan)
 
 else:
