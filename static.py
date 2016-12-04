@@ -16,7 +16,7 @@ def saveLocation(location):
 	return True
 	
 def getIsTrip():
-	rawIsTrip = static.datastore.get_key('isTrip').get_contents_as_string().decode('utf8')
+	rawIsTrip = datastore.get_key('isTrip').get_contents_as_string().decode('utf8')
 	
 	if rawIsTrip == 'True':
 		return True
@@ -33,4 +33,13 @@ def saveIsTrip(isTrip):
 		datastore.get_key('isTrip').set_contents_from_string('False')
 		
 	return True
+	
+def saveLastDestination(destination):
+	coordString = ",".join([str(a) for a in destination.coord])
+	datastore.get_key('lastdestination').set_contents_from_string(coordString)
+	return True
+	
+def getLastDestination():
+	rawCoordinates = datastore.get_key('lastdestination').get_contents_as_string().decode('utf8')
+	return tuple([float(a) for a in rawCoordinates.split(',')])
 	
