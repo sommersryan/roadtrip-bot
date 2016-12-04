@@ -77,3 +77,10 @@ class Plan(object):
 				inst = cls(origin,destination)
 				return inst		
 
+	@classmethod
+	def fromToCoords(cls, originLatLng, destinationLatLng):
+		origin = Place(latitude = originLatLng[0], longitude = originLatLng[1])
+		destination = Place(latitude = destinationLatLng[0], longitude = destinationLatLng[1])
+		inst = cls(origin, destination)
+		return inst
+		
