@@ -23,3 +23,14 @@ def getIsTrip():
 		
 	else:
 		return False
+		
+def saveIsTrip(isTrip):
+	
+	if isTrip:
+		datastore.get_key('isTrip').set_contents_from_string('True')
+	
+	else:
+		datastore.get_key('isTrip').set_contents_from_string('False')
+		
+	return True
+	
