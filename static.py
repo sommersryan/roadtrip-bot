@@ -14,3 +14,12 @@ def saveLocation(location):
 	coordString = ",".join([str(a) for a in location.coord])
 	datastore.get_key('lastlocation').set_contents_from_string(coordString)
 	return True
+	
+def getIsTrip():
+	rawIsTrip = static.datastore.get_key('isTrip').get_contents_as_string().decode('utf8')
+	
+	if rawIsTrip == 'True':
+		return True
+		
+	else:
+		return False
