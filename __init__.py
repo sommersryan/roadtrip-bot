@@ -14,7 +14,9 @@ if static.getIsTrip():
 	newTrip = trip.Trip.fromPlan(newPlan)
 
 else:
-	newPlan = map.Plan.toRandom(departurePoint)
+	dest = map.Place(departurePoint[0], departurePoint[1])
+	
+	newPlan = map.Plan.toRandom(dest)
 
 	logging.info("Plan made: {0} to {1}".format(newPlan.origin.coord, newPlan.destination.coord))
 
@@ -26,8 +28,8 @@ else:
 			break
 	
 		else:
-			logging.info("Bad response. Making new plan from {0}".format(departurePoint.coord))			
-			newPlan = map.Plan.toRandom(departurePoint)
+			logging.info("Bad response. Making new plan from {0}".format(dest.coord))			
+			newPlan = map.Plan.toRandom(dest)
 
 	logging.info("Response obtained. {0} steps.".format(len(newTrip.legs[0].steps)))
 
@@ -106,6 +108,6 @@ tweet.makeTweet(signOut,replyTo=replyTo, lat=newTrip.end.coord[0], long=newTrip.
 
 static.saveLocation(newTrip.end)
 
-logging.info("Departure point reset to {0}. Exiting.".format(departurePoint))
+logging.info("Departure point reset to {0}. Exiting.".format(newTrip.end.coord))
 
 static.saveIsTrip(False)
