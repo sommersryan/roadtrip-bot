@@ -32,7 +32,7 @@ def makeTweet(status,replyTo=None, lat=0, long=0):
 		return 'Tweeted {0}'.format(status)
 	
 	else: 
-		status = status[0:140]
+		status = status[0:139]
 		api.update_status(status=status)
 		return 'Tweeted {0}'.format(status)
 
