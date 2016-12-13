@@ -20,13 +20,6 @@ def getGeoCodeResponse(latLong):
 	parsed = json.loads(geoData)
 	
 	return parsed
-
-def findPlaceNames(string):
-	## Parses a string for place names and returns 
-	string = string.translate(translator)
-	string = string.split()
-	pairs = [(string[i], string[i+1]) for i in range(len(string)-1)]
-	
 	
 class Place(object):
 	
@@ -92,4 +85,33 @@ class Plan(object):
 		destination = Place(latitude = destinationLatLng[0], longitude = destinationLatLng[1])
 		inst = cls(origin, destination)
 		return inst
+
+def findPlaceNames(string):
+	## Parses a string for place names and returns 
+	string = string.translate(translator)
+	string = string.split()
+	pairs = [(string[i], string[i+1]) for i in range(len(string)-1)]
+	
+	foundPlace = None
+	
+	for pair in pairs:
+		request = {
+			'prefix' : GEOCODING_API_PREFIX,
+			'place' : '{0[0]}+{0[1]}'.format(pair),
+			'key' : GEOCODING_API_KEY
+			}
+			
+		requestURL = '{prefix}address={place}&key={key}'.format(**request)
 		
+		with urllib.request.urlopen(requestURL) as response:
+			geoData = response.read().decode('utf8')
+		
+		parsed = json.loads(geoData)
+		
+		if parsed['status'] == "OK":
+			lat = parsed['results'][0]['geometry']['location']['lat']
+			lng = parsed['results'][0]['geometry']['location']['lng']
+			foundPlace = Place(lat,lng)
+			break
+			
+	return foundPlace
