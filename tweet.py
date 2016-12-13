@@ -55,7 +55,7 @@ def getReplies(sinceID):
 	return tweets
 	
 def pickDestination(statuses):
-## take a list of replies and attempt to pick a new desitnation; return tuple of status and map.place object 
+## take a list of replies and attempt to pick a new destination; return tuple of status and map.place object 
 	pass
 	
 	

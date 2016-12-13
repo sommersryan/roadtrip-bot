@@ -1,5 +1,7 @@
-import random, json, urllib.request
+import random, json, urllib.request, string
 from config import MIN_LATITUDE, MAX_LATITUDE, MIN_LONGITUDE, MAX_LONGITUDE, GEOCODING_API_PREFIX, GEOCODING_API_KEY
+
+translator = str.maketrans({key: None for key in string.punctuation})
 
 def getGeoCodeResponse(latLong):
 	## Takes a tuple of latitude, longitude, builds request and gets geocode data	
@@ -19,6 +21,13 @@ def getGeoCodeResponse(latLong):
 	
 	return parsed
 
+def findPlaceNames(string):
+	## Parses a string for place names and returns 
+	string = string.translate(translator)
+	string = string.split()
+	pairs = [(string[i], string[i+1]) for i in range(len(string)-1)]
+	
+	
 class Place(object):
 	
 	def __init__(self, latitude=39.828194, longitude=-98.580100):
