@@ -1,4 +1,4 @@
-import tweepy, urllib.parse, urllib.request, json, random
+import tweepy, urllib.parse, urllib.request, json, random, static
 from config import CONSUMER_SECRET, CONSUMER_KEY, ACCESS_TOKEN, ACCESS_SECRET, BITLY_PREFIX, BITLY_TOKEN
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -50,11 +50,12 @@ def urlShorten(url):
 	return shortened
 	
 def getReplies(sinceID):
-## retrieve and return list of statuses since last ID 	
-	pass 
+## retrieve and return list of replies since last ID at the user	
+	tweets = api.search(q='@{0}'.format(api.me().screen_name), since_id=static.getSinceID())
+	return tweets
 	
-def pickDestination(statuses)
+def pickDestination(statuses):
 ## take a list of replies and attempt to pick a new desitnation; return tuple of status and map.place object 
-
+	pass
 	
 	
