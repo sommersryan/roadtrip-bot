@@ -111,7 +111,9 @@ def findPlaceNames(string):
 		if parsed['status'] == "OK":
 			lat = parsed['results'][0]['geometry']['location']['lat']
 			lng = parsed['results'][0]['geometry']['location']['lng']
-			foundPlace = Place(lat,lng)
-			break
+			
+			if MIN_LATITUDE <= lat <= MAX_LATITUDE and MIN_LONGITUDE <= lng <= MAX_LONGITUDE:
+				foundPlace = Place(lat,lng)
+				break
 			
 	return foundPlace
