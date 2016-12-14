@@ -59,7 +59,6 @@ def saveSuggestion(suggestion):
 	##Takes a suggestion (tuple of reply and place object), pickles, saves to S3Connection
 	
 	zipped = pickle.dumps(suggestion)
-	
 	key_name = str(random.randrange(111111111,999999999))
 	
 	while True:
@@ -70,9 +69,7 @@ def saveSuggestion(suggestion):
 		key_name = str(random.randrange(111111111,999999999))
 	
 	k = Key(suggestionsFile)
-	
 	k.key = key_name
-	
 	k.set_contents_from_string(zipped)
 	
 	return True
@@ -81,11 +78,8 @@ def pickSuggestion():
 	## Retrieves and returns a suggestion from S3Connection
 	
 	keys = [a for a in suggestionsFile.list()]
-	
 	selection = random.choice(keys)
-	
 	raw = selection.get_contents_as_string()
-	
 	suggestionsFile.delete_key(selection.name)
 	
 	return pickle.loads(raw)
