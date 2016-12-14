@@ -77,4 +77,18 @@ def saveSuggestion(suggestion):
 	
 	return True
 	
+def pickSuggestion():
+	## Retrieves and returns a suggestion from S3Connection
+	
+	keys = [a for a in suggestionsFile.list()]
+	
+	selection = random.choice(keys)
+	
+	raw = selection.get_contents_as_string()
+	
+	suggestionsFile.delete_key(selection.name)
+	
+	return pickle.loads(raw)
+	
+	
 	
