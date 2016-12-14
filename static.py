@@ -83,6 +83,3 @@ def pickSuggestion():
 	suggestionsFile.delete_key(selection.name)
 	
 	return pickle.loads(raw)
-	
-	
-	
