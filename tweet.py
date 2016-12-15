@@ -61,8 +61,14 @@ def getSuggestions():
 	possiblePlaces = []
 	
 	for suggestion in suggestions:
-	
-		place = map.findPlaceNames(suggestion.text)
+		
+		sugString = suggestion.text
+		
+		for user in suggestion.entities['user_mentions']:
+		
+			sugString = sugString.replace('@{0} '.format(user['screen_name']),'')
+		
+		place = map.findPlaceNames(sugString)
 		
 		if place:
 		
