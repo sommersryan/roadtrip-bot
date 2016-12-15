@@ -65,7 +65,7 @@ else:
 static.saveLastDestination(newTrip.end)
 previousInterval = MINIMUM_TWEET_INTERVAL + 1
 
-for step in newTrip.legs[0].steps:
+for index, step in enumerate(newTrip.legs[0].steps):
 	
 	logging.info("New step: {0} to {1}, duration {2} seconds".format(step.start.coord,step.end.coord, step.duration['value']))
 	
@@ -77,6 +77,8 @@ for step in newTrip.legs[0].steps:
 	shortURL = tweet.urlShorten(mapURL)
 	
 	logging.info("Short URL obtained: {0}".format(shortURL))
+	
+	newTrip.currentStep = index + 1
 	
 	if previousInterval >= MINIMUM_TWEET_INTERVAL or int(step.duration['value']) >= MINIMUM_OVERRIDE_DURATION:
 		
