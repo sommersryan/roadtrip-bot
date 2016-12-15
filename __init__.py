@@ -14,9 +14,13 @@ if static.getIsTrip():
 	newTrip = trip.Trip.fromPlan(newPlan)
 
 else:
-	dest = map.Place(departurePoint[0], departurePoint[1])
+	orig = map.Place(departurePoint[0], departurePoint[1])
 	
-	newPlan = map.Plan.toRandom(dest)
+	suggestion = static.pickSuggestion()
+	suggestionTweet = suggestion[1]
+	suggestionDestination = suggestion[0]
+	
+	newPlan = map.Plan.fromToCoords(orig.coord, suggestionDestination.coord)
 
 	logging.info("Plan made: {0} to {1}".format(newPlan.origin.coord, newPlan.destination.coord))
 
@@ -28,11 +32,18 @@ else:
 			break
 	
 		else:
-			logging.info("Bad response. Making new plan from {0}".format(dest.coord))			
-			newPlan = map.Plan.toRandom(dest)
+			logging.info("Bad response. Making new plan from {0}".format(orig.coord))			
+			suggestion = static.pickSuggestion()
+			suggestionTweet = suggestion[1]
+			suggestionDestination = suggestion[0]
+			newPlan = map.Plan.fromToCoords(orig.coord, suggestionDestination.coord)
 
 	logging.info("Response obtained. {0} steps.".format(len(newTrip.legs[0].steps)))
-
+	
+	attribution = "OK, @{0}. Let's go to {1}".format(suggestionTweet.user.screen_name, suggestionDestination.highDetail)
+	
+	tweet.makeTweet(status=attribution, replyTo=str(suggestionTweet.id))
+	
 	tripURL = 'https://www.google.com/maps/dir/{0[0]},{0[1]}/{1[0]},{1[1]}/am=t/data=4m4!4m3!2m1!1b1!3e0'.format(
 		newTrip.start.coord, newTrip.end.coord)
 

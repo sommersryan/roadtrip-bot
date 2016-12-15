@@ -64,16 +64,7 @@ class Leg(object):
 		return inst
 		
 	def asString(self):
-		legString = ''
-		legString += self.start.mediumDetail
-		legString += ' to '
-		legString += self.end.mediumDetail
-		legString += ', '
-		legString += self.distance['text']
-		legString += ', '
-		legString += self.duration['text']
-		
-		return legString
+		return '{0} to {1}, {2}'.format(self.start.mediumDetail, self.end.mediumDetail, self.distance['text'])
 	
 	def __repr__(self):
 		return '<{0}, {1}, {2}>'.format(self.start.mediumDetail, self.end.mediumDetail, self.distance['text'])
