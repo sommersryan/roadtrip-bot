@@ -1,5 +1,5 @@
 import tweepy, urllib.parse, urllib.request, json, random, static, map, trip
-from config import CONSUMER_SECRET, CONSUMER_KEY, ACCESS_TOKEN, ACCESS_SECRET, BITLY_PREFIX, BITLY_TOKEN
+from config import CONSUMER_SECRET, CONSUMER_KEY, ACCESS_TOKEN, ACCESS_SECRET, BITLY_PREFIX, BITLY_TOKEN, SCRUB_STRINGS
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
@@ -67,6 +67,10 @@ def getSuggestions():
 		for user in suggestion.entities['user_mentions']:
 		
 			sugString = sugString.replace('@{0} '.format(user['screen_name']),'')
+		
+		for string in SCRUB_STRINGS:
+		
+			sugString = sugString.replace(string, '')
 		
 		place = map.findPlaceNames(sugString)
 		
