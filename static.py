@@ -45,7 +45,7 @@ def getLastDestination():
 	return tuple([float(a) for a in rawCoordinates.split(',')])
 
 def getSinceID():
-	return datastore.get_key('since_id').get_contents_as_string()
+	return datastore.get_key('since_id').get_contents_as_string().decode('utf8')
 
 def setSinceID(newID):
 	datastore.get_key('since_id').set_contents_from_string(newID)
