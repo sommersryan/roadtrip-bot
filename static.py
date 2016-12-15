@@ -8,12 +8,12 @@ datastore = storageConnection.get_bucket(AWS_S3_BUCKET)
 suggestionsFile = storageConnection.get_bucket(SUGGESTIONS_BUCKET)
 
 def getLastLocation():
-	rawCoordinates = datastore.get_key('lastlocation').get_contents_as_string().decode('utf8')
-	return tuple([float(a) for a in rawCoordinates.split(',')])
+	rawLocation = datastore.get_key('lastlocation').get_contents_as_string()
+	return pickle.loads(rawLocation)
 
 def saveLocation(location):
-	coordString = ",".join([str(a) for a in location.coord])
-	datastore.get_key('lastlocation').set_contents_from_string(coordString)
+	zipped = pickle.dumps(location)
+	datastore.get_key('lastlocation').set_contents_from_string(zipped)
 	return True
 	
 def getIsTrip():
@@ -35,14 +35,14 @@ def saveIsTrip(isTrip):
 		
 	return True
 	
-def saveLastDestination(destination):
-	coordString = ",".join([str(a) for a in destination.coord])
-	datastore.get_key('lastdestination').set_contents_from_string(coordString)
+def saveCurrentTrip(trip):
+	zipped = pickle.dumps(trip)
+	datastore.get_key('currentTrip').set_contents_from_string(zipped)
 	return True
 	
-def getLastDestination():
-	rawCoordinates = datastore.get_key('lastdestination').get_contents_as_string().decode('utf8')
-	return tuple([float(a) for a in rawCoordinates.split(',')])
+def getCurrentTrip():
+	raw = datastore.get_key('currentTrip').get_contents_as_string()
+	return pickle.loads(raw)
 
 def getSinceID():
 	return datastore.get_key('since_id').get_contents_as_string().decode('utf8')
