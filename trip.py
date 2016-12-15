@@ -7,6 +7,7 @@ class Trip(object):
 		self.start = start
 		self.end = end
 		self.legs = legs
+		self.currentStep = 0
 	
 	@classmethod
 	def fromPlan(cls, plan):
