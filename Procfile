@@ -1,2 +1,2 @@
-worker: python __init__.py
-worker: python collect.py
+bot: python __init__.py
+menchies: python collect.py
