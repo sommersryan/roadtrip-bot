@@ -121,3 +121,5 @@ static.saveLocation(newTrip.end)
 logging.info("Departure point reset to {0}. Exiting.".format(newTrip.end.coord))
 
 static.saveIsTrip(False)
+
+time.sleep(7200)

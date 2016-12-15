@@ -40,3 +40,5 @@ CONSUMER_SECRET = os.environ.get('CONSUMER_SECRET') or ''
 CONSUMER_KEY = os.environ.get('CONSUMER_KEY') or ''
 ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN') or ''
 ACCESS_SECRET = os.environ.get('ACCESS_SECRET') or ''
+
+SCRUB_STRINGS = ["go to", "let's"]
