@@ -5,22 +5,20 @@ from urllib.error import HTTPError
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 departurePoint = static.getLastLocation()
-logging.info("Retrieved departure point: {0}".format(departurePoint))
+logging.info("Retrieved departure point: {0}".format(departurePoint.coord))
 
 if static.getIsTrip():
 	logging.info("In progress trip detected. Resuming.")
-	dest = static.getLastDestination()
-	newPlan = map.Plan.fromToCoords(departurePoint, dest) 
-	newTrip = trip.Trip.fromPlan(newPlan)
+	newTrip = static.getCurrentTrip()
 
 else:
-	orig = map.Place(departurePoint[0], departurePoint[1])
+	orig = departurePoint
 	
 	suggestion = static.pickSuggestion()
 	suggestionTweet = suggestion[1]
 	suggestionDestination = suggestion[0]
 	
-	newPlan = map.Plan.fromToCoords(orig.coord, suggestionDestination.coord)
+	newPlan = map.Plan(orig, suggestionDestination)
 
 	logging.info("Plan made: {0} to {1}".format(newPlan.origin.coord, newPlan.destination.coord))
 
@@ -36,7 +34,7 @@ else:
 			suggestion = static.pickSuggestion()
 			suggestionTweet = suggestion[1]
 			suggestionDestination = suggestion[0]
-			newPlan = map.Plan.fromToCoords(orig.coord, suggestionDestination.coord)
+			newPlan = map.Plan(orig, suggestionDestination)
 
 	logging.info("Response obtained. {0} steps.".format(len(newTrip.legs[0].steps)))
 	
@@ -59,13 +57,12 @@ else:
 	tweet.makeTweet(status=preamble, lat=newTrip.start.coord[0], long=newTrip.start.coord[1])
 	
 	static.saveIsTrip(True)
-	
+	static.saveCurrentTrip(newTrip)
 	time.sleep(60)
 
-static.saveLastDestination(newTrip.end)
 previousInterval = MINIMUM_TWEET_INTERVAL + 1
 
-for step in newTrip.legs[0].steps:
+for index, step in enumerate(newTrip.legs[0].steps[newTrip.currentStep:]):
 	
 	logging.info("New step: {0} to {1}, duration {2} seconds".format(step.start.coord,step.end.coord, step.duration['value']))
 	
@@ -77,6 +74,8 @@ for step in newTrip.legs[0].steps:
 	shortURL = tweet.urlShorten(mapURL)
 	
 	logging.info("Short URL obtained: {0}".format(shortURL))
+	
+	newTrip.currentStep = index + 1
 	
 	if previousInterval >= MINIMUM_TWEET_INTERVAL or int(step.duration['value']) >= MINIMUM_OVERRIDE_DURATION:
 		
@@ -93,20 +92,20 @@ for step in newTrip.legs[0].steps:
 			image = view.getViewObject(step.start.coord)
 			tweet.makeTweetWithImage(stepTweet, image, replyTo, lat=step.start.coord[0], long=step.start.coord[1])
 			logging.info("Tweet posted. Sleeping for {0} seconds".format(step.duration['value']))
-			static.saveLocation(step.end)
+			static.saveCurrentTrip(newTrip)
 			time.sleep(int(step.duration['value']))
 			continue
 		
 		else:
 			tweet.makeTweet(stepTweet,replyTo=replyTo, lat=step.start.coord[0], long=step.start.coord[1])
 			logging.info("Tweet posted. Sleeping for {0} seconds".format(step.duration['value']))
-			static.saveLocation(step.end)
+			static.saveCurrentTrip(newTrip)
 			time.sleep(int(step.duration['value']))
 			continue
 			
 	previousInterval = int(step.duration['value'])
 	logging.info("Tweet not permitted for this step. Sleeping for {0}".format(step.duration['value']))
-	static.saveLocation(step.end)
+	static.saveCurrentTrip(newTrip)
 	time.sleep(int(step.duration['value']))
 
 time.sleep(60)
