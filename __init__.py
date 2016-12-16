@@ -51,8 +51,8 @@ else:
 	except HTTPError:
 		shortTripURL = ''
 	
-	preamble = 'New trip! {0} to {1}. {2}, {3} {4}'.format(newTrip.start.mediumDetail, 
-		newTrip.end.mediumDetail, newTrip.legs[0].distance['text'], newTrip.legs[0].duration['text'], shortTripURL)
+	preamble = 'New trip! {0} to {1}. {2}, {3} {4}'.format(newTrip.start.lowDetail, 
+		newTrip.end.lowDetail, newTrip.legs[0].distance['text'], newTrip.legs[0].duration['text'], shortTripURL)
 
 	tweet.makeTweet(status=preamble, lat=newTrip.start.coord[0], long=newTrip.start.coord[1])
 	
