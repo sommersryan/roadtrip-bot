@@ -8,8 +8,8 @@ api = tweepy.API(auth)
 
 def makeTweetWithImage(status, image, replyTo=None, lat=0, long=0):
 ## Takes text status and image object and tweets it
-	if len(status) >= 140:
-		status = status[:140]
+	if len(status) >= 138:
+		status = status[:138]
 	
 	if replyTo:
 		api.update_with_media(filename='view.jpg', status=status, in_reply_to_status_id=replyTo, lat=lat, long=long, file=image)
@@ -21,8 +21,8 @@ def makeTweetWithImage(status, image, replyTo=None, lat=0, long=0):
 	
 def makeTweet(status,replyTo=None, lat=0, long=0):
 ## Takes text status and tweets it
-	if len(status) >= 140:
-		status = status[:140]
+	if len(status) >= 138:
+		status = status[:138]
 
 	if replyTo:
 		api.update_status(status=status, in_reply_to_status_id=replyTo, lat=lat, long=long)
