@@ -87,6 +87,10 @@ for index, step in enumerate(newTrip.legs[0].steps[newTrip.currentStep:]):
 		logging.info("Tweet built: {0} | length {1}".format(stepTweet,len(stepTweet)))
 		
 		if view.checkForView(step.start.coord):
+			
+			if len(stepTweet) > 115:
+				stepTweet = stepTweet[:115] + ' '
+			
 			stepTweet += shortURL
 			logging.info("URL added. Tweet length now {0}".format(len(stepTweet)))
 			image = view.getViewObject(step.start.coord)
